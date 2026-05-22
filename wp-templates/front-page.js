@@ -23,7 +23,7 @@ import {
   buildAbsoluteUrl,
   buildBreadcrumbSchema,
   buildKeywordString,
-  buildWebsiteSchema,
+  buildWebPageSchema,
 } from 'utilities';
 
 export default function Component() {
@@ -62,10 +62,16 @@ export default function Component() {
     ],
   });
   const structuredData = [
-    buildWebsiteSchema(),
+    buildWebPageSchema({
+      name: siteTitle,
+      description: homeDescription || siteDescription,
+      url: buildAbsoluteUrl('/'),
+      type: 'WebPage',
+      breadcrumbId: `${buildAbsoluteUrl('/')}#breadcrumb`,
+    }),
     buildBreadcrumbSchema([
       { name: 'Home', url: buildAbsoluteUrl('/') },
-    ]),
+    ], `${buildAbsoluteUrl('/')}#breadcrumb`),
   ];
   return (
     <>

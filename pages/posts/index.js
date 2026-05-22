@@ -19,6 +19,7 @@ import {
   buildBreadcrumbSchema,
   buildCollectionPageSchema,
   buildKeywordString,
+  buildWebPageSchema,
   pageTitle,
 } from 'utilities';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
@@ -54,10 +55,18 @@ export default function Page() {
     description,
     url: canonicalUrl,
   });
+  const breadcrumbId = `${canonicalUrl}#breadcrumb`;
   const breadcrumbSchema = buildBreadcrumbSchema([
     { name: 'Home', url: buildAbsoluteUrl('/') },
     { name: 'Posts', url: canonicalUrl },
-  ]);
+  ], breadcrumbId);
+  const webPageSchema = buildWebPageSchema({
+    name: 'Latest Posts',
+    description,
+    url: canonicalUrl,
+    type: 'CollectionPage',
+    breadcrumbId,
+  });
 
   return (
     <>
@@ -66,7 +75,7 @@ export default function Page() {
         description={description}
         keywords={keywords}
         url={canonicalUrl}
-        structuredData={[collectionSchema, breadcrumbSchema]}
+        structuredData={[collectionSchema, webPageSchema, breadcrumbSchema]}
       />
 
       <Header menuItems={primaryMenu} />

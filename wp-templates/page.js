@@ -11,6 +11,7 @@ import {
   buildBreadcrumbSchema,
   buildKeywordString,
   buildMetaDescription,
+  buildWebPageSchema,
   pageTitle,
 } from 'utilities';
 
@@ -72,9 +73,18 @@ export default function Component(props) {
     content,
     seedKeywords: ['conference planning', 'event planning'],
   });
+  const canonicalUrl = buildAbsoluteUrl(uri || '/');
+  const breadcrumbId = `${canonicalUrl}#breadcrumb`;
   const breadcrumbSchema = buildBreadcrumbSchema(
-    buildBreadcrumbItemsFromPath(uri || '/', title)
+    buildBreadcrumbItemsFromPath(uri || '/', title),
+    breadcrumbId
   );
+  const webPageSchema = buildWebPageSchema({
+    name: title,
+    description,
+    url: canonicalUrl,
+    breadcrumbId,
+  });
 
   // Replace the marker with a stable placeholder DIV for SSR
   const htmlWithSlot = (content ?? '').split(TOKEN).join(SLOT_HTML);
@@ -91,8 +101,8 @@ export default function Component(props) {
         keywords={keywords}
         imageUrl={featuredImage?.node?.sourceUrl}
         imageAlt={featuredImage?.node?.altText}
-        url={buildAbsoluteUrl(uri || '/')}
-        structuredData={breadcrumbSchema}
+        url={canonicalUrl}
+        structuredData={[webPageSchema, breadcrumbSchema]}
       />
       <Header
         title={siteTitle}

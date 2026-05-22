@@ -6,6 +6,7 @@ import {
   buildCollectionPageSchema,
   buildKeywordString,
   buildMetaDescription,
+  buildWebPageSchema,
   pageTitle,
 } from 'utilities';
 
@@ -55,10 +56,18 @@ export default function Archive(props) {
     description: archiveDescription || siteDescription,
     url: canonicalUrl,
   });
+  const breadcrumbId = `${canonicalUrl}#breadcrumb`;
   const breadcrumbSchema = buildBreadcrumbSchema([
     { name: 'Home', url: buildAbsoluteUrl('/') },
     { name: archiveTitle, url: canonicalUrl },
-  ]);
+  ], breadcrumbId);
+  const webPageSchema = buildWebPageSchema({
+    name: archiveTitle,
+    description: archiveDescription || siteDescription,
+    url: canonicalUrl,
+    type: 'CollectionPage',
+    breadcrumbId,
+  });
 
   return (
     <>
@@ -67,7 +76,7 @@ export default function Archive(props) {
         description={archiveDescription || siteDescription}
         keywords={archiveKeywords}
         url={canonicalUrl}
-        structuredData={[collectionSchema, breadcrumbSchema]}
+        structuredData={[collectionSchema, webPageSchema, breadcrumbSchema]}
       />
       <Header
         title={siteTitle}

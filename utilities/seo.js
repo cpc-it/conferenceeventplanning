@@ -1,6 +1,31 @@
 import appConfig from 'app.config';
 
 const DEFAULT_SITE_URL = appConfig.siteUrl.replace(/\/+$/, '');
+const ORGANIZATION_ID = `${DEFAULT_SITE_URL}#organization`;
+const WEBSITE_ID = `${DEFAULT_SITE_URL}#website`;
+const LOCAL_BUSINESS_ID = `${DEFAULT_SITE_URL}#localbusiness`;
+
+function getOrganizationLogoObject() {
+  if (!appConfig.organization.logoPath) {
+    return undefined;
+  }
+
+  const logoUrl = buildAbsoluteUrl(appConfig.organization.logoPath);
+
+  return {
+    '@type': 'ImageObject',
+    url: logoUrl,
+    contentUrl: logoUrl,
+  };
+}
+
+function getOrganizationSameAs() {
+  const socialLinks = appConfig?.socialLinks || {};
+
+  const sameAs = Object.values(socialLinks).filter(Boolean);
+
+  return sameAs.length ? sameAs : undefined;
+}
 
 function normalizePath(path = '/') {
   const [pathname] = `${path || '/'}`.split('#');
@@ -48,39 +73,46 @@ export function buildRobotsDirectives({
 
 export function buildOrganizationSchema() {
   const { organization } = appConfig;
+  const logoObject = getOrganizationLogoObject();
 
-  return {
+  return JSON.parse(JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'Organization',
+    '@id': ORGANIZATION_ID,
     name: organization.name,
     legalName: organization.legalName,
     url: DEFAULT_SITE_URL,
     telephone: organization.phone,
     email: organization.email,
-    logo: organization.logoPath
-      ? buildAbsoluteUrl(organization.logoPath)
-      : undefined,
+    logo: logoObject?.url,
+    image: logoObject?.url,
+    sameAs: getOrganizationSameAs(),
     address: {
       '@type': 'PostalAddress',
       ...organization.address,
     },
-  };
+  }));
 }
 
 export function buildLocalBusinessSchema() {
   const { organization } = appConfig;
+  const logoObject = getOrganizationLogoObject();
 
   return JSON.parse(JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
+    '@id': LOCAL_BUSINESS_ID,
     name: organization.name,
     legalName: organization.legalName,
     url: DEFAULT_SITE_URL,
-    image: organization.logoPath
-      ? buildAbsoluteUrl(organization.logoPath)
-      : undefined,
+    image: logoObject?.url,
+    logo: logoObject?.url,
     telephone: organization.phone,
     email: organization.email,
+    sameAs: getOrganizationSameAs(),
+    parentOrganization: {
+      '@id': ORGANIZATION_ID,
+    },
     areaServed: {
       '@type': 'City',
       name: organization.address.addressLocality,
@@ -96,11 +128,18 @@ export function buildWebsiteSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': WEBSITE_ID,
     name: appConfig.organization.name,
     url: DEFAULT_SITE_URL,
+    publisher: {
+      '@id': ORGANIZATION_ID,
+    },
     potentialAction: {
       '@type': 'SearchAction',
-      target: `${buildAbsoluteUrl('/search')}?q={search_term_string}`,
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${buildAbsoluteUrl('/search')}?q={search_term_string}`,
+      },
       'query-input': 'required name=search_term_string',
     },
   };
@@ -114,7 +153,7 @@ function humanizeSegment(segment = '') {
     .join(' ');
 }
 
-export function buildBreadcrumbSchema(items = []) {
+export function buildBreadcrumbSchema(items = [], id) {
   const itemListElement = items
     .filter((item) => item?.name && item?.url)
     .map((item, index) => ({
@@ -128,11 +167,12 @@ export function buildBreadcrumbSchema(items = []) {
     return null;
   }
 
-  return {
+  return JSON.parse(JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    '@id': id || undefined,
     itemListElement,
-  };
+  }));
 }
 
 export function buildBreadcrumbItemsFromPath(path = '/', currentTitle) {
@@ -181,9 +221,13 @@ export function buildArticleSchema({
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${url}#article`,
     headline,
     description,
-    mainEntityOfPage: url,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': url,
+    },
     url,
     author: authorName
       ? {
@@ -192,9 +236,7 @@ export function buildArticleSchema({
         }
       : undefined,
     publisher: {
-      '@type': 'Organization',
-      name: appConfig.organization.name,
-      url: DEFAULT_SITE_URL,
+      '@id': ORGANIZATION_ID,
     },
     image: image ? [image] : undefined,
     datePublished: datePublished || undefined,
@@ -216,8 +258,47 @@ export function buildCollectionPageSchema({
   return {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
+    '@id': `${url}#collection`,
     name,
     description,
     url,
   };
+}
+
+export function buildWebPageSchema({
+  name,
+  description,
+  url,
+  type = 'WebPage',
+  image,
+  datePublished,
+  dateModified,
+  breadcrumbId,
+}) {
+  if (!name || !url) {
+    return null;
+  }
+
+  return JSON.parse(JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': type,
+    '@id': url,
+    name,
+    description,
+    url,
+    image: image ? [image] : undefined,
+    datePublished: datePublished || undefined,
+    dateModified: dateModified || datePublished || undefined,
+    isPartOf: {
+      '@id': WEBSITE_ID,
+    },
+    about: {
+      '@id': LOCAL_BUSINESS_ID,
+    },
+    breadcrumb: breadcrumbId
+      ? {
+          '@id': breadcrumbId,
+        }
+      : undefined,
+  }));
 }

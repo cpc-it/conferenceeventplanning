@@ -6,6 +6,7 @@ import {
   buildLocalBusinessSchema,
   buildOrganizationSchema,
   buildRobotsDirectives,
+  buildWebsiteSchema,
   getSiteUrl,
   resolveSeoImage,
 } from 'utilities';
@@ -60,6 +61,7 @@ export default function SEO({
   const schemaItems = [
     buildOrganizationSchema(),
     !noindex ? buildLocalBusinessSchema() : null,
+    !noindex ? buildWebsiteSchema() : null,
     ...(Array.isArray(structuredData)
       ? structuredData
       : structuredData

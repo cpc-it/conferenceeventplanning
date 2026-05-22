@@ -18,6 +18,7 @@ import {
   buildBreadcrumbSchema,
   buildKeywordString,
   buildMetaDescription,
+  buildWebPageSchema,
 } from 'utilities';
 
 export default function Component(props) {
@@ -41,11 +42,19 @@ export default function Component(props) {
     seedKeywords: ['project', 'conference planning', 'event planning'],
   });
   const canonicalUrl = buildAbsoluteUrl(props?.data?.project?.uri || '/projects/');
+  const breadcrumbId = `${canonicalUrl}#breadcrumb`;
   const breadcrumbSchema = buildBreadcrumbSchema([
     { name: 'Home', url: buildAbsoluteUrl('/') },
     { name: 'Projects', url: buildAbsoluteUrl('/projects') },
     { name: title, url: canonicalUrl },
-  ]);
+  ], breadcrumbId);
+  const webPageSchema = buildWebPageSchema({
+    name: title,
+    description,
+    url: canonicalUrl,
+    type: 'ItemPage',
+    breadcrumbId,
+  });
   return (
     <>
       <SEO
@@ -55,7 +64,7 @@ export default function Component(props) {
         imageUrl={featuredImage?.node?.sourceUrl}
         imageAlt={featuredImage?.node?.altText}
         url={canonicalUrl}
-        structuredData={breadcrumbSchema}
+        structuredData={[webPageSchema, breadcrumbSchema]}
       />
 
       <Header menuItems={primaryMenu} />

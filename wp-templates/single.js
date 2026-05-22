@@ -18,6 +18,7 @@ import {
   buildBreadcrumbSchema,
   buildKeywordString,
   buildMetaDescription,
+  buildWebPageSchema,
   pageTitle,
   resolveSeoImage,
 } from 'utilities';
@@ -46,6 +47,7 @@ export default function Component(props) {
     seedKeywords: ['blog', 'conference planning', 'event planning'],
   });
   const canonicalUrl = buildAbsoluteUrl(uri || '/');
+  const breadcrumbId = `${canonicalUrl}#breadcrumb`;
   const articleSchema = buildArticleSchema({
     headline: title,
     description,
@@ -58,7 +60,17 @@ export default function Component(props) {
   const breadcrumbSchema = buildBreadcrumbSchema([
     { name: 'Home', url: buildAbsoluteUrl('/') },
     { name: title, url: canonicalUrl },
-  ]);
+  ], breadcrumbId);
+  const webPageSchema = buildWebPageSchema({
+    name: title,
+    description,
+    url: canonicalUrl,
+    type: 'ArticlePage',
+    image: resolveSeoImage(featuredImage?.node?.sourceUrl),
+    datePublished: date,
+    dateModified: modified,
+    breadcrumbId,
+  });
 
   return (
     <>
@@ -74,7 +86,7 @@ export default function Component(props) {
         imageAlt={featuredImage?.node?.altText}
         url={canonicalUrl}
         type="article"
-        structuredData={[articleSchema, breadcrumbSchema]}
+        structuredData={[articleSchema, webPageSchema, breadcrumbSchema]}
       />
       <Header
         title={siteTitle}
