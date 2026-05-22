@@ -20,6 +20,13 @@
   cursor: pointer;
   font-size: 2.75rem;
   color: #666;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .quote-icon {

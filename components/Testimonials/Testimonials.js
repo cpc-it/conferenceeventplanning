@@ -62,10 +62,34 @@ export default function Testimonials({ testimonials = [] }) {
         showArrows={showNav}
         infiniteLoop={showNav}
         renderArrowPrev={
-          showNav ? (click) => <FaChevronLeft className={cx('arrow')} onClick={click} /> : undefined
+          showNav
+            ? (click, hasPrev) => (
+                <button
+                  type="button"
+                  className={cx('arrow')}
+                  onClick={click}
+                  aria-label="Previous testimonials"
+                  disabled={!hasPrev}
+                >
+                  <FaChevronLeft aria-hidden="true" focusable="false" />
+                </button>
+              )
+            : undefined
         }
         renderArrowNext={
-          showNav ? (click) => <FaChevronRight className={cx('arrow')} onClick={click} /> : undefined
+          showNav
+            ? (click, hasNext) => (
+                <button
+                  type="button"
+                  className={cx('arrow')}
+                  onClick={click}
+                  aria-label="Next testimonials"
+                  disabled={!hasNext}
+                >
+                  <FaChevronRight aria-hidden="true" focusable="false" />
+                </button>
+              )
+            : undefined
         }
       >
         {slides.map((group, slideIdx) => (

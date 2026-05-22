@@ -127,7 +127,7 @@ export default function Header({ className, menuItems }) {
             aria-controls="primary-navigation"
             aria-expanded={isNavShown}
           >
-            {isNavShown ? <FaTimes /> : <FaBars />}
+            {isNavShown ? <FaTimes aria-hidden="true" focusable="false" /> : <FaBars aria-hidden="true" focusable="false" />}
           </button>
 
           <NavigationMenu
@@ -144,15 +144,15 @@ export default function Header({ className, menuItems }) {
                   onClick={closeNavigation}
                   aria-label="Close navigation"
                 >
-                  <FaTimes />
+                  <FaTimes aria-hidden="true" focusable="false" />
                 </button>
               </div>
             }
           >
             <li className="menu-item menu-item-search">
               <Link legacyBehavior href="/search" passHref>
-                <a className="menuLink" onClick={closeNavigation}>
-                  <FaSearch title="Search" role="img" />
+                <a className="menuLink" aria-label="Search" onClick={closeNavigation}>
+                  <FaSearch aria-hidden="true" focusable="false" />
                 </a>
               </Link>
             </li>

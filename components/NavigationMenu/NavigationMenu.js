@@ -123,7 +123,7 @@ const NavigationMenu = forwardRef(function NavigationMenu(
                 }`}
                 onClick={() => toggleItem(item.id)}
               >
-                <FaChevronDown />
+                <FaChevronDown aria-hidden="true" focusable="false" />
               </button>
             ) : null}
           </div>
