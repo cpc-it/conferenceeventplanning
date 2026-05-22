@@ -1,4 +1,4 @@
-import { buildAbsoluteUrl, getSiteUrl } from 'utilities';
+import { buildAbsoluteUrl } from 'utilities';
 
 export async function getServerSideProps({ res }) {
   const robots = [
@@ -6,14 +6,14 @@ export async function getServerSideProps({ res }) {
     'Allow: /',
     'Disallow: /api/',
     'Disallow: /preview/',
-    'Disallow: /search/',
-    'Disallow: /404/',
-    `Host: ${getSiteUrl()}`,
+    'Disallow: /search',
     `Sitemap: ${buildAbsoluteUrl('/sitemap.xml')}`,
   ].join('\n');
 
+  res.statusCode = 200;
+  res.setHeader('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=43200');
   res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-  res.write(robots);
+  res.write(`${robots}\n`);
   res.end();
 
   return {
