@@ -9,10 +9,11 @@ import { NavigationMenu, SkipNavigationLink } from '../';
 import styles from './Header.module.scss';
 let cx = classNames.bind(styles);
 
-export default function Header({ className, menuItems }) {
+export default function Header({ className, menuItems, title }) {
   const [isNavShown, setIsNavShown] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
+  const siteTitle = title || 'Conference and Event Planning';
 
   // Classes with scroll-aware styles
   const headerClasses = cx('header', className, { scrolled: isScrolled });
@@ -97,12 +98,12 @@ export default function Header({ className, menuItems }) {
         <div className="container">
           <div className={cx('logo')}>
             <Link legacyBehavior href="/" passHref>
-              <a title="Home">
+              <a title={`${siteTitle} Home`}>
                 <Image
                   src="/logo.png"
                   width={400}
                   height={80}
-                  alt="Cal Poly University logo"
+                  alt={`${siteTitle} logo`}
                   layout="responsive"
                 />
               </a>
@@ -116,7 +117,7 @@ export default function Header({ className, menuItems }) {
       <div className={headerContentClasses}>
         <div className={cx('bar')}>
           <Link legacyBehavior href="/" passHref>
-            <a className={cx('titleName')}>Conference and Event Planning</a>
+            <a className={cx('titleName')}>{siteTitle}</a>
           </Link>
 
           <button
