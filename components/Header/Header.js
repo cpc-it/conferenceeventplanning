@@ -9,6 +9,9 @@ import { NavigationMenu, SkipNavigationLink } from '../';
 import styles from './Header.module.scss';
 let cx = classNames.bind(styles);
 
+const SCROLLED_ON_THRESHOLD = 24;
+const SCROLLED_OFF_THRESHOLD = 4;
+
 export default function Header({ className, menuItems, title }) {
   const [isNavShown, setIsNavShown] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -32,10 +35,15 @@ export default function Header({ className, menuItems, title }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      const nextIsScrolled = window.scrollY > 0;
-      setIsScrolled((currentValue) =>
-        currentValue === nextIsScrolled ? currentValue : nextIsScrolled
-      );
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+
+      setIsScrolled((currentValue) => {
+        if (currentValue) {
+          return scrollY > SCROLLED_OFF_THRESHOLD;
+        }
+
+        return scrollY > SCROLLED_ON_THRESHOLD;
+      });
     };
 
     handleScroll();

@@ -3,8 +3,7 @@
 .header {
   color: var(--color-white);
   background-color: #f8f8f7;
-  transition: background-color 0.35s ease, transform 0.35s ease,
-    height 0.35s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
   position: fixed;
   top: 0;
   width: 100%;
@@ -12,12 +11,13 @@
 
   &.scrolled {
     box-shadow: 0 12px 30px rgba(15, 39, 28, 0.12);
-    height: 65px;
   }
 }
 
 .logo-wrap {
-  transition: transform 0.35s ease, opacity 0.35s ease;
+  overflow: hidden;
+  max-height: 12rem;
+  transition: max-height 0.18s ease, padding 0.18s ease, opacity 0.12s ease;
   padding: 1rem 0;
   background: linear-gradient(
       135deg,
@@ -27,20 +27,22 @@
     var(--color-primary);
 
   &.scrolled {
-    transform: translateY(-20px);
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
     opacity: 0;
     pointer-events: none;
   }
 }
 
 .header-content {
-  transition: transform 0.35s ease;
+  transition: background-color 0.2s ease;
   background-color: rgba(248, 248, 247, 0.94);
   backdrop-filter: blur(18px);
   // border-bottom: 1px solid rgba(21, 71, 52, 0.08);
 
   &.scrolled {
-    transform: translateY(-76px);
+    transform: none;
   }
 }
 
@@ -171,6 +173,8 @@
   :global(.menuLink) {
     display: inline-flex;
     align-items: center;
+    min-height: 4.4rem;
+    padding: 0.6rem 0;
     color: var(--color-primary);
     text-decoration: none;
     background: transparent;
@@ -184,8 +188,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 3.8rem;
-    height: 3.8rem;
+    width: 4.4rem;
+    height: 4.4rem;
     flex: 0 0 auto;
     border: 0;
     border-radius: 999px;
@@ -238,7 +242,7 @@
 
     :global(.menuLink) {
       flex: 1 1 auto;
-      padding: 1.4rem 0;
+      padding: 1rem 0;
       font-size: 1.8rem;
       font-weight: 700;
       letter-spacing: 0.02em;
@@ -253,7 +257,7 @@
       font-size: 1.55rem;
       font-weight: 600;
       text-transform: none;
-      padding: 1.1rem 0;
+      padding: 0.9rem 0;
     }
 
     :global(.menu-item-search .menuLink) {
@@ -265,7 +269,8 @@
   @media (min-width: $breakpoint-small) {
     :global(.menu > .menu-item > .menuLinkWrap > .menuLink) {
       height: 100%;
-      padding: 0 1rem;
+      min-height: 4.4rem;
+      padding: 0.8rem 1rem;
       font-size: 1.7rem;
       font-weight: 700;
       text-transform: uppercase;
@@ -299,6 +304,7 @@
     :global(.menu-item > .subMenu .menuLink) {
       display: block;
       width: 100%;
+      min-height: 4.4rem;
       padding: 1rem 1.5rem;
       white-space: nowrap;
       box-sizing: border-box;
