@@ -1062,14 +1062,14 @@ article form {
   }
 
   input {
-    min-height: 40px;
+    min-height: 44px;
     margin: 0;
   }
 
   button {
     transition: all .3s;
     width: 48% !important; 
-    height: 40px;
+    min-height: 44px;
     grid-column: 1 / -1;
     justify-self: center; /* Centers horizontally in grid */
     width: auto; 

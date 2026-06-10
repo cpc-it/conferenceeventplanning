@@ -1,5 +1,13 @@
 .recommendations {
+  li + li {
+    margin-top: 0.4rem;
+  }
+
   a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 4.4rem;
+    padding: 0.4rem 0;
     color: var(--color-black);
 
     &:hover,
