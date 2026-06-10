@@ -137,18 +137,6 @@ export default function Header({ className, menuItems, title }) {
             menuItems={menuItems}
             isMobile={isMobileView}
             onNavigate={closeNavigation}
-            mobileHeader={
-              <div className={cx('mobile-menu-header')}>
-                <button
-                  type="button"
-                  className={cx('mobile-menu-close')}
-                  onClick={closeNavigation}
-                  aria-label="Close navigation"
-                >
-                  <FaTimes aria-hidden="true" focusable="false" />
-                </button>
-              </div>
-            }
           >
             <li className="menu-item menu-item-search">
               <Link legacyBehavior href="/search" passHref>
