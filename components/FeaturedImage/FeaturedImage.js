@@ -17,6 +17,8 @@ export default function FeaturedImage({
 
   const w = Number(width ?? image?.mediaDetails?.width);
   const h = Number(height ?? image?.mediaDetails?.height);
+  const blurDataURL = image?.blurDataURL;
+  const shouldPrioritize = Boolean(isHero || props?.priority);
 
   if (!src || !w || !h) return null;
 
@@ -28,8 +30,11 @@ export default function FeaturedImage({
         width={w}
         height={h}
         quality={80}
-        priority={isHero}
-        fetchPriority={isHero ? 'high' : undefined}
+        priority={shouldPrioritize}
+        fetchPriority={shouldPrioritize ? 'high' : undefined}
+        loading={shouldPrioritize ? 'eager' : 'lazy'}
+        placeholder={blurDataURL ? 'blur' : undefined}
+        blurDataURL={blurDataURL}
         sizes="100vw"
         style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
         {...props}

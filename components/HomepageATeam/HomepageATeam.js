@@ -17,7 +17,6 @@ export default function HomepageATeam() {
               height={1067}
               alt="Guests laughing and socializing around red tablecloth cocktail tables with bowls of strawberries at a networking event."
               className={styles.image}
-              priority
             />
           </figure>
 

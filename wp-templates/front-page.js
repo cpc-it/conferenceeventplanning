@@ -2,6 +2,7 @@ import * as MENUS from 'constants/menus';
 
 import { useQuery, gql } from '@apollo/client';
 import styles from 'styles/pages/_Home.module.scss';
+import bannerImage from '../public/static/banner.jpeg';
 import {
   EntryHeader,
   Main,
@@ -44,8 +45,9 @@ export default function Component() {
   const resources = data?.resourcesFooterMenuItems?.nodes ?? [];
 
   const mainBanner = {
-    sourceUrl: '/static/banner.jpeg',
-    mediaDetails: { width: 2560, height: 1280 },
+    sourceUrl: bannerImage.src,
+    blurDataURL: bannerImage.blurDataURL,
+    mediaDetails: { width: bannerImage.width, height: bannerImage.height },
     altText: 'Portfolio Banner',
   };
   const homeDescription =
