@@ -81,6 +81,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   width: 4.6rem;
   height: 4.6rem;
   margin: 0;
@@ -105,6 +106,10 @@
 
   @media (min-width: $breakpoint-small) {
     display: none;
+  }
+
+  @media (max-width: 767px) {
+    z-index: 30;
   }
 }
 
