@@ -1,6 +1,11 @@
 import pageTitle from './pageTitle';
 import flatListToHierarchical from './flatListToHierarchical';
-import { buildKeywordString, buildMetaDescription, stripHtml } from './seoMeta';
+import {
+  buildKeywordString,
+  buildMetaDescription,
+  decodeHtmlEntities,
+  stripHtml,
+} from './seoMeta';
 import {
   buildAbsoluteUrl,
   buildArticleSchema,
@@ -25,6 +30,7 @@ export {
   buildKeywordString,
   buildLocalBusinessSchema,
   buildMetaDescription,
+  decodeHtmlEntities,
   buildOrganizationSchema,
   buildRobotsDirectives,
   buildWebPageSchema,

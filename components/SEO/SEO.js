@@ -8,6 +8,7 @@ import {
   buildOrganizationSchema,
   buildRobotsDirectives,
   buildWebsiteSchema,
+  decodeHtmlEntities,
   getSiteUrl,
   resolveSeoImage,
 } from 'utilities';
@@ -47,12 +48,33 @@ export default function SEO({
 }) {
   const router = useRouter();
   const seoDefaults = appConfig?.seo || {};
+  const normalizeSeoText = (value = '') => decodeHtmlEntities(`${value ?? ''}`)
+    .replace(/\s+/g, ' ')
+    .trim();
   const siteName = seoDefaults.siteName || appConfig?.organization?.name || 'Site';
-  const fallbackTitle = title || seoDefaults.defaultTitle || siteName;
-  const fallbackDescription =
-    description || seoDefaults.defaultDescription || appConfig?.organization?.name;
+  const fallbackTitle = normalizeSeoText(
+    title || seoDefaults.defaultTitle || siteName
+  );
+  const defaultDescription = normalizeSeoText(
+    seoDefaults.defaultDescription || appConfig?.organization?.name
+  );
+  const requestedDescription = normalizeSeoText(description);
+  const genericDescriptionValues = new Set(['home', 'homepage', 'page']);
+  const requestedDescriptionLower = requestedDescription.toLowerCase();
+  const isThinRequestedDescription =
+    !requestedDescription
+    || requestedDescription.length < 50
+    || requestedDescriptionLower === fallbackTitle.toLowerCase()
+    || genericDescriptionValues.has(requestedDescriptionLower);
+  const fallbackDescription = normalizeSeoText(
+    (isThinRequestedDescription
+      ? defaultDescription || requestedDescription || fallbackTitle
+      : requestedDescription)
+  );
   const socialImageUrl = imageUrl || seoDefaults.defaultSocialImage;
-  const socialImageAlt = imageAlt || seoDefaults.defaultImageAlt || siteName;
+  const socialImageAlt = normalizeSeoText(
+    imageAlt || seoDefaults.defaultImageAlt || siteName
+  );
 
   if (!fallbackTitle && !fallbackDescription && !keywords && !socialImageUrl && !url) {
     return null;
@@ -107,34 +129,34 @@ export default function SEO({
 
         <meta property="og:type" content={type} />
         <meta property="og:site_name" content={siteName} />
-        <meta property="twitter:card" content="summary_large_image" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content={seoDefaults.twitterHandle || '@site'} />
         <meta name="twitter:domain" content={siteUrl.replace(/^https?:\/\//, '')} />
 
         <title>{fallbackTitle}</title>
         <meta name="title" content={fallbackTitle} />
         <meta property="og:title" content={fallbackTitle} />
-        <meta property="twitter:title" content={fallbackTitle} />
+        <meta name="twitter:title" content={fallbackTitle} />
 
         <meta name="description" content={fallbackDescription} />
         <meta property="og:description" content={fallbackDescription} />
-        <meta property="twitter:description" content={fallbackDescription} />
+        <meta name="twitter:description" content={fallbackDescription} />
 
         {keywords && <meta name="keywords" content={keywords} />}
 
         {resolvedImageUrl && (
           <>
             <meta property="og:image" content={resolvedImageUrl} />
-            <meta property="twitter:image" content={resolvedImageUrl} />
+            <meta name="twitter:image" content={resolvedImageUrl} />
             <meta property="og:image:alt" content={socialImageAlt} />
-            <meta property="twitter:image:alt" content={socialImageAlt} />
+            <meta name="twitter:image:alt" content={socialImageAlt} />
           </>
         )}
 
         {shouldRenderSocialUrl && (
           <>
             <meta property="og:url" content={canonicalUrl} />
-            <meta property="twitter:url" content={canonicalUrl} />
+            <meta name="twitter:url" content={canonicalUrl} />
           </>
         )}
         {schemaItems.map((schema, index) => (

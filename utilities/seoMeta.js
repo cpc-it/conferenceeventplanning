@@ -80,7 +80,7 @@ const HTML_ENTITY_MAP = {
   '&hellip;': '...',
 };
 
-function decodeEntities(text = '') {
+export function decodeHtmlEntities(text = '') {
   const normalizedText = `${text ?? ''}`;
 
   return Object.entries(HTML_ENTITY_MAP).reduce(
@@ -89,10 +89,16 @@ function decodeEntities(text = '') {
   );
 }
 
+function normalizeMetaText(text = '') {
+  return decodeHtmlEntities(`${text ?? ''}`)
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export function stripHtml(html = '') {
   const normalizedHtml = `${html ?? ''}`;
 
-  return decodeEntities(
+  return decodeHtmlEntities(
     normalizedHtml
       .replace(/<style[\s\S]*?<\/style>/gi, ' ')
       .replace(/<script[\s\S]*?<\/script>/gi, ' ')
@@ -118,9 +124,22 @@ export function buildMetaDescription({
   content,
   fallback = '',
   maxLength = 160,
+  minLength = 50,
 }) {
-  const bodyText = stripHtml(content);
-  const candidate = bodyText || fallback || title || '';
+  const bodyText = normalizeMetaText(stripHtml(content));
+  const normalizedFallback = normalizeMetaText(fallback);
+  const normalizedTitle = normalizeMetaText(title);
+
+  const bodyLooksThin =
+    bodyText && (
+      bodyText.length < minLength
+      || (normalizedTitle
+        && bodyText.toLowerCase() === normalizedTitle.toLowerCase())
+    );
+
+  const candidate = bodyLooksThin
+    ? normalizedFallback || bodyText || normalizedTitle
+    : bodyText || normalizedFallback || normalizedTitle;
 
   return truncateAtWordBoundary(candidate, maxLength);
 }
