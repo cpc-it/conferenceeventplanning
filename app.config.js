@@ -26,6 +26,19 @@ const appConfig = {
   },
 
   /**
+   * Shared SEO defaults used by the central metadata layer.
+   */
+  seo: {
+    siteName: 'Cal Poly Conference and Event Planning',
+    defaultTitle: 'Cal Poly Conference and Event Planning',
+    defaultDescription:
+      'Conference and event planning services for memorable meetings, conventions, and campus experiences in California.',
+    defaultSocialImage: '/logo.png',
+    defaultImageAlt: 'Cal Poly Conference and Event Planning logo',
+    twitterHandle: '@calpoly',
+  },
+
+  /**
    * The number of posts to fetch per 'page'.
    */
   postsPerPage: 9,

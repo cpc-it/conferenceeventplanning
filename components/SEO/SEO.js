@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
+import appConfig from 'app.config';
 import {
   buildAbsoluteUrl,
   buildLocalBusinessSchema,
@@ -45,8 +46,15 @@ export default function SEO({
   structuredData,
 }) {
   const router = useRouter();
+  const seoDefaults = appConfig?.seo || {};
+  const siteName = seoDefaults.siteName || appConfig?.organization?.name || 'Site';
+  const fallbackTitle = title || seoDefaults.defaultTitle || siteName;
+  const fallbackDescription =
+    description || seoDefaults.defaultDescription || appConfig?.organization?.name;
+  const socialImageUrl = imageUrl || seoDefaults.defaultSocialImage;
+  const socialImageAlt = imageAlt || seoDefaults.defaultImageAlt || siteName;
 
-  if (!title && !description && !keywords && !imageUrl && !url) {
+  if (!fallbackTitle && !fallbackDescription && !keywords && !socialImageUrl && !url) {
     return null;
   }
   const typekitHref = 'https://use.typekit.net/mfv5sni.css';
@@ -56,7 +64,7 @@ export default function SEO({
   const canonicalUrl =
     url || buildAbsoluteUrl(canonicalPath || router?.asPath || '/');
   const shouldRenderCanonical = Boolean(canonicalUrl) && !noindex;
-  const resolvedImageUrl = resolveSeoImage(imageUrl);
+  const resolvedImageUrl = resolveSeoImage(socialImageUrl);
   const robots = buildRobotsDirectives({ noindex, nofollow, noarchive });
   const schemaItems = [
     buildOrganizationSchema(),
@@ -97,42 +105,28 @@ export default function SEO({
         <meta name="format-detection" content="telephone=yes" />
 
         <meta property="og:type" content={type} />
-        <meta
-          property="og:site_name"
-          content="Cal Poly Conference and Event Planning"
-        />
+        <meta property="og:site_name" content={siteName} />
         <meta property="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content={seoDefaults.twitterHandle || '@site'} />
         <meta name="twitter:domain" content={siteUrl.replace(/^https?:\/\//, '')} />
 
-        {title && (
-          <>
-            <title>{title}</title>
-            <meta name="title" content={title} />
-            <meta property="og:title" content={title} />
-            <meta property="twitter:title" content={title} />
-          </>
-        )}
+        <title>{fallbackTitle}</title>
+        <meta name="title" content={fallbackTitle} />
+        <meta property="og:title" content={fallbackTitle} />
+        <meta property="twitter:title" content={fallbackTitle} />
 
-        {description && (
-          <>
-            <meta name="description" content={description} />
-            <meta property="og:description" content={description} />
-            <meta property="twitter:description" content={description} />
-          </>
-        )}
+        <meta name="description" content={fallbackDescription} />
+        <meta property="og:description" content={fallbackDescription} />
+        <meta property="twitter:description" content={fallbackDescription} />
 
         {keywords && <meta name="keywords" content={keywords} />}
 
-        {imageUrl && (
+        {resolvedImageUrl && (
           <>
             <meta property="og:image" content={resolvedImageUrl} />
             <meta property="twitter:image" content={resolvedImageUrl} />
-            {imageAlt ? (
-              <>
-                <meta property="og:image:alt" content={imageAlt} />
-                <meta property="twitter:image:alt" content={imageAlt} />
-              </>
-            ) : null}
+            <meta property="og:image:alt" content={socialImageAlt} />
+            <meta property="twitter:image:alt" content={socialImageAlt} />
           </>
         )}
 
