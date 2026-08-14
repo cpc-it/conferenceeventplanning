@@ -3,6 +3,7 @@ import * as MENUS from 'constants/menus';
 import { gql, useQuery } from '@apollo/client';
 import Link from 'next/link';
 import { Button, Footer, Header, Main, NavigationMenu, SEO } from 'components';
+import appConfig from 'app.config';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 import styles from 'styles/pages/_404.module.scss';
 import { buildAbsoluteUrl, buildKeywordString } from 'utilities';
@@ -12,10 +13,43 @@ export default function Page() {
     variables: Page.variables(),
   });
 
-  if (pageLoading || !pageData) return null;
+  const fallbackSiteTitle =
+    appConfig?.seo?.defaultTitle ||
+    appConfig?.seo?.siteName ||
+    appConfig?.organization?.name ||
+    'Page Not Found';
+  const fallbackSiteDescription =
+    appConfig?.seo?.defaultDescription ||
+    'The page you are looking for could not be found. Try heading home or searching the site.';
 
   const { title: siteTitle, description: siteDescription } =
-    pageData?.generalSettings ?? {};
+    pageData?.generalSettings ?? {
+      title: fallbackSiteTitle,
+      description: fallbackSiteDescription,
+    };
+
+  const pageTitle = siteTitle ? `404 - ${siteTitle}` : '404 - Page Not Found';
+  const description =
+    siteDescription ||
+    fallbackSiteDescription;
+  const keywords = buildKeywordString({
+    title: '404 page not found',
+    content: description,
+    seedKeywords: ['404', 'page not found', 'site navigation'],
+  });
+
+  if (pageLoading || !pageData) {
+    return (
+      <SEO
+        title={pageTitle}
+        description={description}
+        keywords={keywords}
+        url={buildAbsoluteUrl('/404/')}
+        noindex
+        noarchive
+      />
+    );
+  }
 
   const primaryMenu = pageData?.headerMenuItems?.nodes ?? [];
   const quickLinks = pageData?.quickFooterMenuItems?.nodes ?? [];
@@ -23,16 +57,6 @@ export default function Page() {
   const navOneMenuItems = pageData?.footerSecondaryMenuItems?.nodes ?? [];
   const navTwoMenuItems = pageData?.footerTertiaryMenuItems?.nodes ?? [];
   const resourcesMenuItems = pageData?.resourcesFooterMenuItems?.nodes ?? [];
-
-  const pageTitle = siteTitle ? `404 — ${siteTitle}` : '404 — Page Not Found';
-  const description =
-    siteDescription ||
-    'The page you are looking for could not be found. Try heading home or searching the site.';
-  const keywords = buildKeywordString({
-    title: '404 page not found',
-    content: description,
-    seedKeywords: ['404', 'page not found', 'site navigation'],
-  });
 
   return (
     <>

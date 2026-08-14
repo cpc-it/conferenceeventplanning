@@ -81,15 +81,19 @@ const HTML_ENTITY_MAP = {
 };
 
 function decodeEntities(text = '') {
+  const normalizedText = `${text ?? ''}`;
+
   return Object.entries(HTML_ENTITY_MAP).reduce(
     (result, [entity, value]) => result.replaceAll(entity, value),
-    text
+    normalizedText
   );
 }
 
 export function stripHtml(html = '') {
+  const normalizedHtml = `${html ?? ''}`;
+
   return decodeEntities(
-    html
+    normalizedHtml
       .replace(/<style[\s\S]*?<\/style>/gi, ' ')
       .replace(/<script[\s\S]*?<\/script>/gi, ' ')
       .replace(/<[^>]+>/g, ' ')

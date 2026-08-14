@@ -64,6 +64,7 @@ export default function SEO({
   const canonicalUrl =
     url || buildAbsoluteUrl(canonicalPath || router?.asPath || '/');
   const shouldRenderCanonical = Boolean(canonicalUrl) && !noindex;
+  const shouldRenderSocialUrl = Boolean(canonicalUrl);
   const resolvedImageUrl = resolveSeoImage(socialImageUrl);
   const robots = buildRobotsDirectives({ noindex, nofollow, noarchive });
   const schemaItems = [
@@ -130,7 +131,7 @@ export default function SEO({
           </>
         )}
 
-        {shouldRenderCanonical && (
+        {shouldRenderSocialUrl && (
           <>
             <meta property="og:url" content={canonicalUrl} />
             <meta property="twitter:url" content={canonicalUrl} />
