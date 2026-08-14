@@ -112,7 +112,7 @@ export default function Header({ className, menuItems, title }) {
                   width={400}
                   height={80}
                   alt={`${siteTitle} logo`}
-                  layout="responsive"
+                  style={{ width: '100%', height: 'auto' }}
                 />
               </a>
             </Link>

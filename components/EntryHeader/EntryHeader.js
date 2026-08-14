@@ -31,7 +31,7 @@ export default function EntryHeader({ title, image, date, author, className }) {
           <FeaturedImage
             className={cx('featured-image')}
             image={image}
-            isHero={isHome}
+            isHero
             sizes="100vw"
             quality={72}
           />
