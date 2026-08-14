@@ -86,6 +86,8 @@
   position: relative;
   width: 4.6rem;
   height: 4.6rem;
+  min-width: 4.4rem;
+  min-height: 4.4rem;
   margin: 0;
   padding: 0;
   background: linear-gradient(135deg, #154734, #1f5b45);
@@ -93,6 +95,8 @@
   border: 0;
   border-radius: 999px;
   box-shadow: 0 14px 30px rgba(21, 71, 52, 0.2);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: transform 0.2s ease, box-shadow 0.2s ease,
     background-color 0.2s ease;
 
@@ -123,14 +127,16 @@
     top: 0;
     right: 0;
     width: min(88vw, 38rem);
-    height: 100dvh;
-    padding: 9rem 2rem 2rem;
+    height: 100vh;
+    min-height: -webkit-fill-available;
+    padding: calc(9rem + env(safe-area-inset-top)) 2rem calc(2rem + env(safe-area-inset-bottom));
     display: block;
     background: #ffffff;
     box-shadow: -20px 0 60px rgba(15, 39, 28, 0.18);
     transform: translateX(100%);
     pointer-events: none;
     overflow-y: auto;
+    overscroll-behavior: contain;
     transition: transform 0.3s ease;
     z-index: 20;
 
@@ -173,6 +179,7 @@
   :global(.menuLink) {
     display: inline-flex;
     align-items: center;
+    min-width: 4.4rem;
     min-height: 4.4rem;
     padding: 0.6rem 0;
     color: var(--color-primary);
@@ -182,6 +189,8 @@
     text-align: left;
     cursor: pointer;
     font-family: inherit;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   :global(.submenuToggle) {
@@ -190,11 +199,15 @@
     justify-content: center;
     width: 4.4rem;
     height: 4.4rem;
+    min-width: 4.4rem;
+    min-height: 4.4rem;
     flex: 0 0 auto;
     border: 0;
     border-radius: 999px;
     background: rgba(21, 71, 52, 0.08);
     color: var(--color-primary);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
     transition: transform 0.2s ease, background-color 0.2s ease;
 
     &:hover,
