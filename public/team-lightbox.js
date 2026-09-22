@@ -18,18 +18,30 @@
       img: "tammy-farrell.jpg",
       html: `<p>A key figure in both Conference & Event Planning and the Performing Arts Center, Tammy oversees all financial transactions, actively participates in the annual budget process and so much more all to ensure that financial plans align seamlessly with organizational goals and objectives, fostering sustainable growth and resource allocation.</p>`
     },
-    "nicole-lopez": {
-      title: "Nicole Lopez",
-      role: "Event Operations Specialist",
-      img: "nicole-lopez.jpg",
-      html: `<p>Nicole Lopez is a 2026 graduate of Cal Poly, San Luis Obispo, where she earned a degree in Experience Industry Management with a focus on Sports Management. A Portland native, Nicole joined the team in June 2026 and works to create seamless event production from planning to breakdown. She brings a detail-oriented, collaborative approach to every project, helping ensure that each event runs smoothly while delivering a memorable experience for clients.</p>`
-    },
     "harlie-adams": {
       title: "Harlie Adams",
       role: "Event and Project Coordinator",
       img: "harlie-adams.jpg",
       html: `<p>Harlie excels at planning and executing events, meticulously aligning every detail with client goals and expectations. From choosing venues and managing vendors to coordinating timelines and overseeing on-site logistics, Harlie brings creativity, expertise and experience to craft seamless, memorable experiences.</p>`
     },
+    "brandon-hancock": {
+      title: "Brandon Hancock",
+      role: "Event Operations Specialist",
+      img: "brandon-hancock.jpg",
+      html: `<p>Brandon Hancock is passionate about creating memorable experiences through thoughtful event planning and execution. A 2018 graduate of Cal Poly with a degree in Wine & Viticulture, Brandon is committed to enhancing the campus experience and supporting meaningful connections between the university and its community. He enjoys collaborating with clients, bringing events to life, and ensuring every attendee has a positive and engaging experience from start to finish.</p>`
+    },
+    "nicole-lopez": {
+      title: "Nicole Lopez",
+      role: "Event Operations Specialist",
+      img: "nicole-lopez.jpg",
+      html: `<p>Nicole Lopez is a 2026 graduate of Cal Poly, San Luis Obispo, where she earned a degree in Experience Industry Management with a focus on Sports Management. A Portland native, Nicole joined the team in June 2026 and works to create seamless event production from planning to breakdown. She brings a detail-oriented, collaborative approach to every project, helping ensure that each event runs smoothly while delivering a memorable experience for clients.</p>`
+    },
+    "chiara-cipolla-jones": {
+      title: "Chiara Cipolla-Jones",
+      role: "Event Coordinator",
+      img: "chiara-cipolla-jones.jpg",
+      html: `<p>Chiara Cipolla-Jones grew up in Pismo Beach, CA, and went on to graduate from Cal Poly in 2020 with a degree in Experience Industry Management and a concentration in Sports Management. Chiara has a passion for event planning and brings her organization and love for creating memorable experiences to every event she plans. She especially enjoys the behind-the-scenes details that make an event a success and creating a fun, stress-free experience for her clients and their guests.</p>`
+    }
   };
 
   function slugify(s) {
