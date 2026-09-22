@@ -1,7 +1,7 @@
 // Minimal, framework-free lightbox for your existing WP HTML
 (function () {
-  if (window.__teamLightboxInitialized) {
-    return;
+  if (typeof window.__teamLightboxCleanup === 'function') {
+    window.__teamLightboxCleanup();
   }
   window.__teamLightboxInitialized = true;
 
@@ -12,23 +12,17 @@
       img: "erin-scherer.jpg",
       html: `<p>Through a unique blend of strategic planning, operational expertise and collaborative leadership Erin leads this amazing team by supporting them with event logistics and management.</p><p>In addition to directing high-profile events, Erin is instrumental in aligning conference and event strategies with client’s overall goals to ensure seamless logistical execution and effective utilization of resources.</p>`
     },
-    "scott-homolka": {
-      title: "Scott Homolka",
-      role: "Senior Coordinator",
-      img: "scott-homolka.jpg",
-      html: `<p>Scott’s takes on all facets of event management, from facility reservations and catering arrangements to managing vendor contracts and event housing all to adhere to the client’s budget. He oversees the execution of events – like the famed EPIC Engineering Camp cardboard boat race.</p>`
-    },
     "tammy-farrell": {
       title: "Tammy Farrell",
       role: "Senior Accounting Analyst",
       img: "tammy-farrell.jpg",
       html: `<p>A key figure in both Conference & Event Planning and the Performing Arts Center, Tammy oversees all financial transactions, actively participates in the annual budget process and so much more all to ensure that financial plans align seamlessly with organizational goals and objectives, fostering sustainable growth and resource allocation.</p>`
     },
-    "nathan-tausch": {
-      title: "Nathan Tausch",
+    "nicole-lopez": {
+      title: "Nicole Lopez",
       role: "Event Operations Specialist",
-      img: "nathan-tausch.jpg",
-      html: `<p>Nathan Tausch is a 2023 graduate of Cal Poly, San Luis Obispo, where he earned a degree in Recreation, Parks & Tourism Administration with a focus on Sports Management. A San Diego native, Nathan joined the team in November 2024 and works to create seamless event production from planning to breakdown.</p>`
+      img: "nicole-lopez.jpg",
+      html: `<p>Nicole Lopez is a 2026 graduate of Cal Poly, San Luis Obispo, where she earned a degree in Experience Industry Management with a focus on Sports Management. A Portland native, Nicole joined the team in June 2026 and works to create seamless event production from planning to breakdown. She brings a detail-oriented, collaborative approach to every project, helping ensure that each event runs smoothly while delivering a memorable experience for clients.</p>`
     },
     "harlie-adams": {
       title: "Harlie Adams",
@@ -149,6 +143,11 @@
   function init() {
     ensureOverlayMounted();
     document.addEventListener('click', handleTeamClick);
+    window.__teamLightboxCleanup = function () {
+      document.removeEventListener('click', handleTeamClick);
+      overlay.remove();
+      document.documentElement.style.overflow = '';
+    };
   }
 
   if (document.readyState === 'loading') {

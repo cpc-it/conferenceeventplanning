@@ -55,7 +55,7 @@ export default function MyApp({ Component, pageProps }) {
       />
       {shouldLoadTeamLightbox ? (
         <Script
-          src="/team-lightbox.js"
+          src="/team-lightbox.js?v=20260922-2"
           strategy="afterInteractive"
         />
       ) : null}
