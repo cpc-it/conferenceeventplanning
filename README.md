@@ -47,12 +47,16 @@ Optional variables:
 
 ```env
 FAUST_SECRET_KEY=your_faust_secret
+NEXT_PUBLIC_GA4_MEASUREMENT_ID=G-121M5PNKJP
+NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=your-google-verification-code
 ```
 
 Notes:
 
 - `NEXT_PUBLIC_WORDPRESS_URL` is used by FaustWP and by the custom sitemap route.
 - `FAUST_SECRET_KEY` is required for Faust preview/auth flows when your local environment needs it.
+- GA4 is enabled with the current production measurement ID (`G-121M5PNKJP`) by default. Set `NEXT_PUBLIC_GA4_MEASUREMENT_ID` in the deployment environment to use a different GA4 web stream.
+- To verify a URL-prefix property in Google Search Console with the HTML tag method, set `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` to the verification code from the tag's `content` attribute (not the full meta tag), then rebuild and deploy. The site emits the verification meta tag globally. Alternatively, verify a Domain property by adding Google's DNS TXT record at the domain's DNS provider.
 
 ## Local Development
 

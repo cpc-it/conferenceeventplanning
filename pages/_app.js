@@ -2,12 +2,16 @@ import '../faust.config';
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { FaustProvider } from '@faustwp/core';
+import Head from 'next/head';
 import Script from 'next/script';
 import 'normalize.css/normalize.css';
 import '../styles/main.scss';
 import ThemeStyles from 'components/ThemeStyles/ThemeStyles';
 
-const GA_TRACKING_ID = 'G-121M5PNKJP';
+const GA_TRACKING_ID =
+  process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || 'G-121M5PNKJP';
+const GOOGLE_SITE_VERIFICATION =
+  process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -34,7 +38,14 @@ export default function MyApp({ Component, pageProps }) {
   // -------------------------------
   return (
     <>
-      {/* ✅ Google Analytics scripts */}
+      {GOOGLE_SITE_VERIFICATION ? (
+        <Head>
+          <meta
+            name="google-site-verification"
+            content={GOOGLE_SITE_VERIFICATION}
+          />
+        </Head>
+      ) : null}
       <Script
         strategy="lazyOnload"
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
@@ -47,7 +58,7 @@ export default function MyApp({ Component, pageProps }) {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${GA_TRACKING_ID}', {
+            gtag('config', ${JSON.stringify(GA_TRACKING_ID)}, {
               page_path: window.location.pathname,
             });
           `,
